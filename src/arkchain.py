@@ -5,13 +5,12 @@ import hashlib
 
 """
 arkchain.py facilitates all chain-related processes which will allow the network to collectively maintain a public ledger.
-
 """
 
-class zkp_record:
-    TimeStamp = datetime.datetime.now()
-    Data_Identifier = '' # Any identifier, eg. File Hash
-    Zero_Knowledge_Proof = '' # Proof of source
+class zkp_record():
+    timestamp = datetime.datetime.now()
+    dataidentifier = '' # Any identifier, eg. File Hash
+    zero_knowledge_proof = '' # Proof of source
     # public_key = '' # Optional public key allows automatic source identification, reduces privacy but may be necessary.
 
 class ArkBlock:
@@ -31,7 +30,7 @@ class ArkBlock:
         self.records.append(rec) # Append zkp_record to the block's record list
 
     def set_blockhash(self):
-        self.blockhash = hashlib.sha256(self)
+        self.blockhash = hashlib.sha256(self) # Buffer API required? 
 
     def timestamp(self): # Updates all record timestamp to now
         # Might not be necessary
@@ -81,9 +80,17 @@ class ArkChain:
     def process_block(self):
         if self.nextblock == None:
             self.init_block()
-        for i in self.queue:
-            self.nextblock.records.append(i)
 
+        queue = self.queue.copy()
+
+        count = 0 # Only do 50 records off the queue per process
+        for i in queue:
+            self.nextblock.records.append(i)
+            self.queue.remove(i)
+            count+=1
+            if count >= 50:
+                break
+            
         self.finalise_block()
 
     def finalise_block(self): #
@@ -91,10 +98,14 @@ class ArkChain:
         assert isinstance(self.nextblock, ArkBlock)
 
         if self.current_block != None:
-            self.nextblock.set_blockhash() # Generate blockhash
+            print(len(self.nextblock.records))
+            #self.nextblock.set_blockhash() # Generate blockhash
 
         self.chain.append(self.nextblock) # Add to chain[]
         self.update_currentblock() # Update current_block 
+        self.nextblock = None
+
+        print("Added %d records to the chain" % len(self.current_block.records))
 
     def update_currentblock(self):
         self.current_block = self.get_previousblock()
@@ -107,8 +118,6 @@ class ArkChain:
     def add_to_queue(self): # Test function to simulate zkp records being added.
         for i in range(0,5):
             newrec = zkp_record()
-            newrec.Data_Identifier = i
-            newrec.Zero_Knowledge_Proof = i
+            newrec.dataidentifier = i
+            newrec.zero_knowledge_proof = i
             self.queue.append(newrec)
-
-

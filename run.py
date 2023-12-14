@@ -3,7 +3,7 @@ import sys, os
 parentdir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(parentdir)
 import src.arkchain as arkchaincore
-import src.snark
+import src.snark as snark
 import hashlib
 
 def write_chain(chain):
@@ -56,6 +56,26 @@ def generate_hashlist(num):
 
     return hashlist
 
-hlist = generate_hashlist(100)
+# arkchain setup
+hlist = generate_hashlist(800)
 arkchain = arkchaincore.ArkChain()
+#arkchain = load_chain()
 
+# zksnark setup
+#mysnark = snark.mysnark()
+#mysnark.generate_proof()
+
+for i in range(0,800):
+    newrec = arkchaincore.zkp_record()
+    newrec.dataidentifier = hlist[i]
+    newrec.zero_knowledge_proof = i
+    #print(newrec.timestamp,newrec.dataidentifier,newrec.zero_knowledge_proof)
+    arkchain.queue.append(newrec)
+
+arkchain.init_block()
+while len(arkchain.queue) != 0:
+    arkchain.process_block()
+
+len(arkchain.queue)
+
+write_chain(arkchain.chain)
