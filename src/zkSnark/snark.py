@@ -32,17 +32,20 @@ class mysnark:
         self.in_t = in_t
         self.outv = outv
 
-        self.pb = pb
-
-        
-        
-    def generate_proof(self, dataid=1, private_key='pkm'):
-        pb = self.pb
 
         # create witnesses
         pb.setval(self.inv, 3)
         pb.setval(self.in_t, 21)
         pb.setval(self.outv, 60)
+
+        self.pb = pb
+
+        
+        
+    def generate_proof(self):
+        pb = self.pb
+
+        
 
         cs=pb.get_constraint_system_pubs()
         pubvals=pb.primary_input_pubs()
