@@ -1,44 +1,101 @@
-from enum import Enum
-import pysnark
-import datetime
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import rsa
 import hashlib
-
+import arkblock
+import consensus
+import data_tree
+from configparser import ConfigParser
 """
-arkchain.py facilitates all chain-related processes which will allow the network to collectively maintain a public ledger.
+arkchain.py facilitates the network protocol
 """
 
-class verification_record():
-    timestamp = datetime.datetime.now()
-    dataidentifier = '' # Any identifier, eg. File Hash
-    zero_knowledge_proof = '' # Proof of source
+class node: # A node in ArkChain
+    def __init__(self, configpath="./config") -> None:
+        self.block = arkblock.ArkBlock() 
+        #self.blocklist = [] # Blocks aquired externally
+        self.local_tree = data_tree.DataTree()
+        self.consensus = []
+        # Config
+        self.config = self.read_config(configpath)
 
-class ArkBlock:
-    def __init__(self, user):
-        self.records = []
-        self.origin = user.public_key # How to account for third-party proofs?
+        # Generate a new private key if none is specified
+        self.private_key = rsa.generate_private_key(public_exponent=65537,key_size=4096)
+        self.save_key() # Write path to config too.
 
-    def check_verification_record(self, rec):
-        assert type(rec) == type(verification_record)
-        assert type(rec[0]) == type(float) # index 0 is timestamp
-        assert type(rec[1]) == type(str) # index 1 is identifier
-        assert type(rec[2]) == type(str) # index 2 is the Zero-Knowledge Proof
+    def read_config(self, filepath):
+        # parse config to memory. Determines slice, key filepaths etc.
+        c = dict()
+        # Initialise default values
+        c["nodenum"] = 0
+        """        
+        bfs["slice_address"] = 2
+        bfs[""] = 5
+        bfs["bf_step"] = 1
+        bfs["max_abs_diff"] = 20
+        bfs["min_val"] = 0
+        bfs["max_val"] = 100       
+        bfs["q"] = 2
 
-    def add_verification_record(self, rec):
-        self.check_verification_record(rec) # Checks correct format of verification_record before adding
-        self.records.append(rec) # Append verification_record to the block's record list
+        # Find settings in bloomfilter.ini
+        if self.config == None:
+            self.findConfig()
 
-    def timestamp(self): # Updates all record timestamp to now
-        # Might not be necessary
+        # Use custom settings if they exist
+        for setting, value in self.config["bloomfilter"].items():
+            bfs[setting] = int(value)
+        """
+        for setting, value in self.config.items():
+            self.config[setting] = value
+
         pass
 
-class ArkChain:
-    def __init__(self) -> None:
-        self.chain = []
-        self.current_block = None # This is the last finalized block
-        self.queue = []
+    def initiate_consensus(self):
+        # Broadcasts current hash of dataTree to the network
+        # consensus.initiate()
+        new_agreement = consensus.agreement()
+        new_agreement.initiate(self.local_tree)
+        pass
 
-        # ZK-SNARK variables / trusted setup
+    def determine_agreement(self, agreement):
+        # Configurable rules for agreement
+        # if dataTree == myDataTree
+        # vote yes
+        agreement.decide_consensus()
+        pass
+
+    def finalise_consensus(self, agreement):
+        # 
+        self.consensus.append(agreement)
+        pass
+
+    def save_key(self):
+        # Write our key to disk for safe keeping
+
+        with open("./keys/key.pem"+self.config_nodenum, "wb") as f:
+
+            f.write(self.private_key.private_bytes(
+
+                encoding=serialization.Encoding.PEM,
+
+                format=serialization.PrivateFormat.TraditionalOpenSSL,
+
+                encryption_algorithm=serialization.BestAvailableEncryption(b"passphrase"), # Password to load the node's key.
+
+            ))
+
+    def load_key(self):
+        # Load from the disk
+        with open("./keys/key.pem"+self.config_nodenum, "wb") as f:
+
+            f.read(self.private_key.private_bytes(
+
+                encoding=serialization.Encoding.PEM,
+
+                format=serialization.PrivateFormat.TraditionalOpenSSL,
+
+                encryption_algorithm=serialization.BestAvailableEncryption(b"passphrase"), # Password to load the node's key.
+
+            ))
 
     
-
 

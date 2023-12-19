@@ -2,20 +2,10 @@ import pickle
 import sys, os
 parentdir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(parentdir)
-import src.arkchain as arkchaincore
-import src.snark as snark
+import src.node as node
+import src.zkSnark as snark
 import hashlib
 
-def write_chain(chain):
-    file = open('chain', 'wb')
-    pickle.dump(chain,file)
-    file.close()
-
-def load_chain():
-    file = open('chain', 'rb')
-    chain = pickle.load(file)
-    file.close()
-    return chain
 
 def file_hash(file_path):
     """
@@ -34,7 +24,7 @@ def file_hash(file_path):
     return sha256.hexdigest()
 
 
-def generate_hashlist(num):
+def generate_hashlist(num): # Hashing at this level no longer relevant
     assert num<803
 
     directory_in_str = './sample_images'
@@ -58,24 +48,11 @@ def generate_hashlist(num):
 
 # arkchain setup
 hlist = generate_hashlist(800)
-arkchain = arkchaincore.ArkChain()
-#arkchain = load_chain()
 
-# zksnark setup
-#mysnark = snark.mysnark()
-#mysnark.generate_proof()
+def read_config(filepath):
+    # parse config to nodes memory
+    pass
 
-for i in range(0,800):
-    newrec = arkchaincore.zkp_record()
-    newrec.dataidentifier = hlist[i]
-    newrec.zero_knowledge_proof = i
-    #print(newrec.timestamp,newrec.dataidentifier,newrec.zero_knowledge_proof)
-    arkchain.queue.append(newrec)
-
-arkchain.init_block()
-while len(arkchain.queue) != 0:
-    arkchain.process_block()
-
-len(arkchain.queue)
-
-write_chain(arkchain.chain)
+node1 = node.node()
+node2 = node.node()
+node3 = node.node()
