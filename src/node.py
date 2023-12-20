@@ -13,7 +13,8 @@ arkchain.py facilitates the network protocol
 """
 
 class node: # A node in ArkChain
-    def __init__(self, configpath="./config") -> None:
+    def __init__(self, node_id, configpath="./config") -> None:
+        self.id = node_id
         self.block = arkblock.ArkBlock(self) 
         #self.blocklist = [] # Blocks aquired externally
         self.local_tree = data_tree.DataTree()
@@ -92,7 +93,6 @@ class node: # A node in ArkChain
             filename = os.fsdecode(file)
             record = arkblock.verification_record()
             record.dataidentifier = record.file_hash(directory_in_str+filename)
-            print(record.dataidentifier)            
-            record.proof = record.sign(bytes(record.dataidentifier),self.private_key)
-            print(record.dataidentifier, record.proof)
+            record.proof = record.sign(record.dataidentifier.encode(),self.private_key)
             self.block.add_verification_record(record)
+

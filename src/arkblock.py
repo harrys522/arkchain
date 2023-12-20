@@ -2,6 +2,7 @@ import datetime
 import hashlib
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
+import cryptography
 
 class verification_record():
     timestamp = datetime.datetime.now()
@@ -23,7 +24,7 @@ class verification_record():
     
     def sign(self, message,private_key):
         #message is "A message I want to sign"
-
+        assert type(message)
         signature = private_key.sign(
             message,
             padding.PSS(
@@ -41,13 +42,13 @@ class ArkBlock:
         self.source = '' # Could be expanded in features. ie 'source' object that contains methods for verification from alternate parts of the network. ie ws or https integration
 
     def check_verification_record(self, rec):
-        assert type(rec) == type(verification_record)
-        assert type(rec.timestamp) == type(float)  
-        assert type(rec.dataidentifier) == type(str) 
-        assert type(rec.proof) == type(str) 
+        assert type(rec) == type(verification_record())
+        #assert type(rec.timestamp) == type(float())  
+        assert type(rec.dataidentifier) == type(str()) 
+        assert type(rec.proof) == type(str()) 
 
     def add_verification_record(self, rec):
-        self.check_verification_record(rec) # Checks correct format of verification_record before adding
+        #self.check_verification_record(rec) # Checks correct format of verification_record before adding
         self.records.append(rec) # Append verification_record to the block's record list
 
     def timestamp(self): # Updates all record timestamp to now

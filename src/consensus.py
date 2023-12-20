@@ -26,6 +26,7 @@ class agreement:
     def generate_multisig(self):
         # Generate multi-signature from the private keys of all nodes in quorum
         pass
-    
-    
 
+
+    def reached_consensus(self):
+        pass
