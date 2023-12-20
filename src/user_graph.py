@@ -22,6 +22,7 @@ def create_user_graph(nodes):
         G.add_node(user.id)
 
     # Add edges to represent peers
+    ### this is adding edges of all nodes to other nodes (not really efficient, ask Harry)
     for i in range(len(nodes)):
         for j in range(i + 1, len(nodes)):
             G.add_edge(nodes[i].id, nodes[j].id)
