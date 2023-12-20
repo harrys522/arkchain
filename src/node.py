@@ -24,7 +24,9 @@ class node: # A node in ArkChain
         # Generate a new private key if none is specified
         self.private_key = rsa.generate_private_key(public_exponent=65537,key_size=4096)
         self.public_key = self.private_key.public_key()
-        self.save_keys() # Write path to config too.
+        self.save_key() # Write path to config too.
+
+        self.add_data()
 
     def read_config(self, filepath):
         # parse config to memory. Determines slice, key filepaths etc.
@@ -37,7 +39,6 @@ class node: # A node in ArkChain
         
         for setting, value in config['node'].items():
             c[setting] = value
-            print(value)
 
         return c
 
@@ -82,15 +83,15 @@ class node: # A node in ArkChain
             ))
 
     def add_data(self): # Adds data from path specified config
-        directory_in_str = self.config['data_path']
+        directory_in_str = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + self.config['data_path'].strip('"')
+        print(directory_in_str)
         directory = os.fsencode(directory_in_str)
 
         for file in os.listdir(directory):
             filename = os.fsdecode(file)
-            self.block.add_verification_record()
-            hash256 = file_hash(directory_in_str+filename)
-
-
-
-    
-
+            record = arkblock.verification_record()
+            record.dataidentifier = record.file_hash(directory_in_str+filename)
+            print(record.dataidentifier)            
+            record.proof = record.sign(bytes(record.dataidentifier),self.private_key)
+            print(record.dataidentifier, record.proof)
+            self.block.add_verification_record(record)
