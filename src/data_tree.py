@@ -116,4 +116,4 @@ data_tree.insert_thread_safe(4, 'Four')
 
 # Retrieve sorted elements
 sorted_elements = data_tree.get_sorted_elements()
-print(sorted_elements)
+#print(sorted_elements)

@@ -1,8 +1,8 @@
 import sys, os
 parentdir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(parentdir)
-import src.fba.fba_server # Needs to be rewritten as object-oriented
-import src.fba.fba_client
+#import src.fba.fba_server # Needs to be rewritten as object-oriented
+#import src.fba.fba_client
 # Use these imports to speed up development
 # One quorum slice in prototype
 
