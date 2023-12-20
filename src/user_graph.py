@@ -1,4 +1,4 @@
-
+from node import node
 
 class UserGraph:
     def __init__(self, users: node):
