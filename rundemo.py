@@ -49,9 +49,7 @@ def generate_hashlist(num): # Hashing at this level no longer relevant
 # arkchain setup
 hlist = generate_hashlist(800)
 
-def read_config(filepath):
-    # parse config to nodes memory
-    pass
+
 
 node1 = node.node()
 node2 = node.node()
