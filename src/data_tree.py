@@ -3,8 +3,8 @@ import threading
 class DataNode:
     def __init__(self, key, value):
         """
-        All data will be stored in an AVL tree. The key will be the contents of the file (hashed),
-        and the value will be the user's (prover/verifier)'s public key. 
+        All data will be stored in an AVL tree. The key will be the timestamp,
+        and the value will be the ArkBlock. 
         """
         self.key = key
         self.value = value

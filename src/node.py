@@ -25,6 +25,7 @@ class node: # A node in ArkChain
         self.private_key = rsa.generate_private_key(public_exponent=65537,key_size=4096)
         self.public_key = self.private_key.public_key()
         self.save_keys() # Write path to config too.
+        self.peers = []
 
     def read_config(self, filepath):
         # parse config to memory. Determines slice, key filepaths etc.
