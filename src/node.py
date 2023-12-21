@@ -8,6 +8,7 @@ import arkblock
 import consensus
 import data_tree
 from configparser import ConfigParser
+from user_graph import broadcast_information
 """
 arkchain.py facilitates the network protocol-
 """
@@ -115,9 +116,10 @@ class node: # A node in ArkChain
         else:
             return False
 
-    def verify(self, file_path):
+    def verify(self, file_path, user_graph):
         # Generate hash, then search for it.
-        
-        # 
-        pass
+        foo = arkblock.verification_record()
+        verify_hash = foo.file_hash(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))+file_path) # Generate hash
+        verified_peers = broadcast_information(self, user_graph, "REQ "+verify_hash) # Request a node response from nodes which have a hash.
+        print("Peers which verified", file_path, " : ", verified_peers)
 

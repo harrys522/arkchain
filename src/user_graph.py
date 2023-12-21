@@ -6,12 +6,7 @@
 # Then, the peers of that user will share with their peers and so on until the broadcast is complete.
 # Note that information broadcasted cannot go backward to peers to previously sent it to current peers)
 
-import pickle
-import sys
-import os
 import networkx as nx
-from node import node
-from data_tree import DataTree
 
 # Function to create a connected graph of users
 def create_user_graph(nodes):
@@ -47,7 +42,7 @@ def broadcast_information(user, graph, information):
     assert type(graph) == type(nx.Graph())
     peers = set(graph.neighbors(user))
     for peer in peers:
-        print(f"Broadcasting information from {user.id} to {peer.id}")
+        #print(f"Broadcasting information from {user.id} to {peer.id}")
         # We need to write what the broadcast information is going to be HERE!!!!!!
         peer.message = information
 
@@ -57,8 +52,7 @@ def broadcast_information(user, graph, information):
         if peer.process_broadcast():
             verified_peers.append(peer.id)
 
-    print(verified_peers)
-
+    return verified_peers
 
 
 

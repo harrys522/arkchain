@@ -34,7 +34,7 @@ data_tree = DataTree()
 # Retrieve sorted elements from the data tree
 sorted_elements = data_tree.get_sorted_elements()
 
-node1.verify("/sample_images/pikachu.png")
-node2.verify("/sample_images/charizard.png")
-node3.verify("/sample_images/gangar.png")
-node4.verify("/sample_images/charmander.png")
+node1.verify("/sample_images/pikachu.png", user_graph)
+node2.verify("/sample_images/charizard.png", user_graph)
+node3.verify("/sample_images/gengar.png", user_graph)
+node4.verify("/sample_images/charmander.png", user_graph)
