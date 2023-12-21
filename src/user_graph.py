@@ -57,6 +57,7 @@ def broadcast_information(user, graph, information):
         for peer in peers:
             print(f"Broadcasting information from {current_user} to {peer}")
             # We need to write what the broadcast information is going to be HERE!!!!!!
+            visited.add(peer)
 
         # Add unvisited peers to the queue for further broadcasting
         queue.extend(peers - set(queue))
