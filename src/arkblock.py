@@ -50,6 +50,27 @@ class ArkBlock:
     def add_verification_record(self, rec):
         #self.check_verification_record(rec) # Checks correct format of verification_record before adding
         self.records.append(rec) # Append verification_record to the block's record list
+        self.records.sort() # Keep records sorted
+    
+    def find_record(self, file_hash):
+        index = self.__binary_search(0, len(self.records) - 1)
+        return self.records[index] if index != -1 else None
+
+    def __binary_search(self, left, right, file_hash):
+        low, high = left, right
+
+        while low <= high:
+            mid = (low + high) // 2
+            mid_val = self.records[mid]
+
+            if mid_val == file_hash:
+                return mid  # Target found, return the index
+            elif mid_val < file_hash:
+                low = mid + 1  # Discard the left half
+            else:
+                high = mid - 1  # Discard the right half
+
+        return -1  # Target not found in the array
 
     def timestamp(self): # Updates all record timestamp to now
         return datetime.datetime.now()
