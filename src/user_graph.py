@@ -16,22 +16,21 @@ from data_tree import DataTree
 # Function to create a connected graph of users
 def create_user_graph(nodes):
     G = nx.Graph()
-
+    
     # Add nodes to the graph
     for user in nodes:
-        G.add_node(user.id)
+        G.add_node(user)
 
     # Add edges to represent peers
-    ### this is adding edges of all nodes to other nodes (not really efficient, ask Harry)
     for i in range(len(nodes)):
         for j in range(i + 1, len(nodes)):
-            G.add_edge(nodes[i].id, nodes[j].id)
+            G.add_edge(nodes[i], nodes[j])
 
     return G
 
 # Function to request and add peers for a specific user
-def add_peers(user, graph, num_peers_to_add=1):
-    neighbors = list(graph.neighbors(user.id))
+def add_peers(user, graph:nx.Graph, num_peers_to_add=1):
+    neighbors = list(graph.neighbors(user))
     new_peers = []
 
     for _ in range(num_peers_to_add):
@@ -39,28 +38,28 @@ def add_peers(user, graph, num_peers_to_add=1):
             break
         peer = neighbors.pop(0)
         new_peers.append(peer)
-        graph.add_edge(user.id, peer)
+        graph.add_edge(user, peer)
 
     return new_peers
 
 # Function for broadcasting information across the network
 def broadcast_information(user, graph, information):
-    visited = set()
-    queue = [user.id]
+    assert type(graph) == type(nx.Graph())
+    peers = set(graph.neighbors(user))
+    for peer in peers:
+        print(f"Broadcasting information from {user.id} to {peer.id}")
+        # We need to write what the broadcast information is going to be HERE!!!!!!
+        peer.message = information
 
-    while queue:
-        current_user = queue.pop(0)
-        visited.add(current_user)
 
-        # Broadcast information to the peers of the current user
-        peers = set(graph.neighbors(current_user)) - visited
-        for peer in peers:
-            print(f"Broadcasting information from {current_user} to {peer}")
-            # We need to write what the broadcast information is going to be HERE!!!!!!
-            visited.add(peer)
+    for peer in peers:
+        verified_peers = []
+        if peer.process_broadcast():
+            verified_peers.append(peer.id)
 
-        # Add unvisited peers to the queue for further broadcasting
-        queue.extend(peers - set(queue))
+    print(verified_peers)
+
+
 
 
 

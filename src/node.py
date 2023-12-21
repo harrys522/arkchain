@@ -9,26 +9,27 @@ import consensus
 import data_tree
 from configparser import ConfigParser
 """
-arkchain.py facilitates the network protocol
+arkchain.py facilitates the network protocol-
 """
 
 class node: # A node in ArkChain
     def __init__(self, node_id, configpath="./config") -> None:
         self.id = node_id
         self.block = arkblock.ArkBlock(self) 
-        #self.blocklist = [] # Blocks aquired externally
+        self.blocklist = [] # Blocks aquired externally, stored whenever you verify
         self.local_tree = data_tree.DataTree()
         self.consensus = []
         # Config
         self.config = self.read_config(configpath)
 
-        # Generate a new private key if none is specified
+        # Generate a new private key and save it in the keys folder
         self.private_key = rsa.generate_private_key(public_exponent=65537,key_size=4096)
         self.public_key = self.private_key.public_key()
         self.save_key() # Write path to config too.
-        self.peers = []
+        self.peers = [] # List of peers
+        self.add_data() # Add data from data_path in config to the arkblock data structure.
 
-        self.add_data()
+        self.message = '' # Current message for communication
 
     def read_config(self, filepath):
         # parse config to memory. Determines slice, key filepaths etc.
@@ -95,4 +96,27 @@ class node: # A node in ArkChain
             record.dataidentifier = record.file_hash(directory_in_str+filename)
             record.proof = record.sign(record.dataidentifier.encode(),self.private_key)
             self.block.add_verification_record(record)
+
+    def find_hash(self,hash): # Check block for hash
+        assert type(hash) == type(str())
+        hashfound = False
+        for r in self.block.records:
+            if str(r.dataidentifier) == hash:
+                hashfound = True
+
+        return hashfound
+    
+    def process_broadcast(self):
+        if self.message:
+            if "REQ" in self.message:
+                reqhash = self.message.strip("REQ ")
+                return self.find_hash(reqhash)
+            
+        else:
+            return False
+
+    def verify(self, file_path):
+        # Generate hash, then search for it.
+        # 
+        pass
 

@@ -39,7 +39,7 @@ class ArkBlock:
     def __init__(self, node):
         self.records = []
         self.parent = node
-        self.source = '' # Could be expanded in features. ie 'source' object that contains methods for verification from alternate parts of the network. ie ws or https integration
+        self.name = '' # Could be expanded in features. ie 'source' object that contains methods for verification from alternate parts of the network. ie ws or https integration
 
     def check_verification_record(self, rec):
         assert type(rec) == type(verification_record())
