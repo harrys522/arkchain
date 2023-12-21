@@ -117,6 +117,7 @@ class node: # A node in ArkChain
 
     def verify(self, file_path):
         # Generate hash, then search for it.
+        
         # 
         pass
 

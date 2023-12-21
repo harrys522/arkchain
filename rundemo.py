@@ -22,7 +22,7 @@ user_graph = create_user_graph(slice1)
 
 ### THIS IS JUST EXAMPLE USE CASES OF ADDING PEERS AND BROADCASTING
 # Request and add peers for a specific user (In this case node 1)
-new_peers = add_peers(node1, user_graph, num_peers_to_add=2)
+new_peers = add_peers(node1, user_graph, num_peers_to_add=3)
 print(f"New peers for node1: {new_peers}")
 
 # Broadcast information from a specific user (e.g., node1 and their request hash to peers)
