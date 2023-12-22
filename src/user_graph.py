@@ -28,17 +28,20 @@ def add_peers(user, graph:nx.Graph, num_peers_to_add=1):
     neighbors = list(graph.neighbors(user))
     new_peers = []
 
-    for _ in range(num_peers_to_add):
+    for n in range(num_peers_to_add):
         if not neighbors:
             break
         peer = neighbors.pop(0)
         new_peers.append(peer)
         graph.add_edge(user, peer)
 
+    
+
     return new_peers
 
 # Function for broadcasting information across the network
 def broadcast_information(user, graph, information):
+    print("Node",user.id,"broadcast a request to the network.")
     assert type(graph) == type(nx.Graph())
     peers = set(graph.neighbors(user))
     for peer in peers:
@@ -50,7 +53,7 @@ def broadcast_information(user, graph, information):
     for peer in peers:
         verified_peers = []
         if peer.process_broadcast():
-            verified_peers.append(peer.id)
+            verified_peers.append(peer)
 
     return verified_peers
 

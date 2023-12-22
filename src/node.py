@@ -5,7 +5,7 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 import hashlib
 import arkblock
-import consensus
+#import consensus
 import data_tree
 from configparser import ConfigParser
 from user_graph import broadcast_information
@@ -88,7 +88,6 @@ class node: # A node in ArkChain
 
     def add_data(self): # Adds data from path specified config
         directory_in_str = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + self.config['data_path'].strip('"')
-        print(directory_in_str)
         directory = os.fsencode(directory_in_str)
 
         for file in os.listdir(directory):
@@ -97,6 +96,8 @@ class node: # A node in ArkChain
             record.dataidentifier = record.file_hash(directory_in_str+filename)
             record.proof = record.sign(record.dataidentifier.encode(),self.private_key)
             self.block.add_verification_record(record)
+
+        print("Added data to node", str(self.id)+"'s ArkBlock.", len(self.block.records), "verification records available")
 
     def find_hash(self,hash): # Check block for hash
         assert type(hash) == type(str())
@@ -111,15 +112,29 @@ class node: # A node in ArkChain
         if self.message:
             if "REQ" in self.message:
                 reqhash = self.message.strip("REQ ")
-                return self.find_hash(reqhash)
-            
+                print("Node",self.id," searching records for ",reqhash)
+                return self.find_hash(reqhash)            
         else:
             return False
 
     def verify(self, file_path, user_graph):
+        print("Node",self.id,"attempting to verify ",file_path)
         # Generate hash, then search for it.
         foo = arkblock.verification_record()
         verify_hash = foo.file_hash(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))+file_path) # Generate hash
-        verified_peers = broadcast_information(self, user_graph, "REQ "+verify_hash) # Request a node response from nodes which have a hash.
-        print("Peers which verified", file_path, " : ", verified_peers)
+        verifier_peers = broadcast_information(self, user_graph, "REQ "+verify_hash) # Request a node response from nodes which have a hash.
+        v_ids = []
+        for v in verifier_peers:
+            v_ids.append(v.id)
+        if v_ids:
+            print(file_path, "verified by node(s) : ", v_ids)
+        else:
+            print("Record not found")
+
+        # Take peers public key and verify the signature.
+        #assert type(verifier_peers[0]) == type(node())
+        #pk = verifier_peers[0].public_key
+        #pk.verify(self.local_tree.get_sorted_elements()) # Consensus algorithm should assure that all nodes have public key and 
+        
+        
 

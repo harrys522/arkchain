@@ -22,9 +22,17 @@ user_graph = create_user_graph(slice1)
 
 ### THIS IS JUST EXAMPLE USE CASES OF ADDING PEERS AND BROADCASTING
 # Request and add peers for a specific user (In this case node 1)
-new_peers = add_peers(node1, user_graph, num_peers_to_add=3)
-print(f"New peers for node1: {new_peers}")
+node1.peers = add_peers(node1, user_graph, num_peers_to_add=3)
+node2.peers = add_peers(node2, user_graph, num_peers_to_add=3)
+node3.peers = add_peers(node3, user_graph, num_peers_to_add=3)
+node4.peers = add_peers(node4, user_graph, num_peers_to_add=3)
 
+newpeerids = []
+for n in node1.peers:
+    newpeerids.append(n.id)
+print(f"New peers for node1: {newpeerids}")
+
+"""
 # Broadcast information from a specific user (e.g., node1 and their request hash to peers)
 broadcast_information(node2, user_graph, information="REQ cb51dad7a814614594a76d242592129bb9883a9ab7ad03348c14750bb4354907")
 
@@ -33,8 +41,8 @@ data_tree = DataTree()
 
 # Retrieve sorted elements from the data tree
 sorted_elements = data_tree.get_sorted_elements()
-
+"""
 node1.verify("/sample_images/pikachu.png", user_graph)
 node2.verify("/sample_images/charizard.png", user_graph)
-node3.verify("/sample_images/gengar.png", user_graph)
-node4.verify("/sample_images/charmander.png", user_graph)
+node3.verify("/sample_images/psyduck.png", user_graph)
+#node4.verify("/sample_images/charmander.png", user_graph)
