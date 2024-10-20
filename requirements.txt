@@ -1,0 +1,17 @@
+asarPy==1.0.1
+cffi==1.17.1
+cryptography==43.0.3
+Cython==3.0.11
+Mako==1.3.5.dev0
+Markdown==3.5.2
+MarkupSafe==2.1.5
+meson==1.5.2
+networkx==3.4.1
+packaging==24.1
+pycairo==1.27.0
+pycparser==2.22
+Pygments==2.18.0
+PyGObject==3.50.0
+setuptools==75.1.0.post20241007
+six==1.16.0
+wheel==0.44.0

@@ -1,12 +1,18 @@
-## ArkChain: The future of data verification
+## ArkChain: OpenD/I 2023 December Hackathon Submission
 
-ArkChain is a experimental project that is not fully developed, do not use this code for anything important. This code is provided as-is with no guarantee of functionality or liability to the author, it should be considered academic-grade.
+ArkChain was a project and team that tackled the OpenD/I Hackathon's Challenge 3, the Data Verification challenge. The hackathon ran over multiple weeks out of the Sydney Startup Hub where the Arkchain team worked to develop a solution for verifying data integrity and authenticity.
 
 ### Design
-Arkchain takes is a prototype for decentralised security through a novel approach to data integrity. We allow different nodes to validate data which is identified by a unique hash, so that no extra information or heavy payloads are shared throughout the network. Only the metadata including claimed source and file hash are communicated through the network, we use an arkblock structure to group data based on it's context / source.
+Arkchain was designed with decentralization in mind, intending for independent nodes to validate data by reaching consensus on it's unique hash. Only the metadata including claimed source and file hash are communicated through the network, we namespace and identify data based on it's source and the topics that were collected.
+
+### Next steps for the prototype
+If the prototype were developed further, some topics of interest could include federated byzantine consensus and zero knowledge proofs.
 
 ## Running the demonstration
-To run the demo, you can use a very simple command to run a script that will simulate the functionality of our solution.
+To run a solution demonstration, use the following commands in the root directory of this repository:
 
-Navigate to the directory of /arkchain
-Terminal: python3 rundemo.py
+
+```
+pip install -r requirements.txt
+python3 rundemo.py
+```
